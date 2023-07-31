@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/ZhanserikKalmukhambet/Trello/internal/entity"
-	"gorm.io/gorm"
+	"github.com/ZhanserikKalmukhambet/Trello/internal/repository"
 )
 
 type Authorization interface {
@@ -32,6 +32,6 @@ type Service struct {
 	TodoItem
 }
 
-func NewService(db *gorm.DB) *Service {
+func NewService(repo *repository.Repository) *Service {
 	return &Service{}
 }

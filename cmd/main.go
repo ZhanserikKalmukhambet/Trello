@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/ZhanserikKalmukhambet/Trello/internal/app"
 	"github.com/ZhanserikKalmukhambet/Trello/internal/config"
-	"github.com/ZhanserikKalmukhambet/Trello/pkg/http_server"
 )
 
 func main() {
@@ -14,6 +14,8 @@ func main() {
 	}
 	fmt.Println(fmt.Sprintf("%#v", cfg))
 
-	// initialize server
-	server := http_server.New()
+	err = app.Run(cfg)
+	if err != nil {
+		panic(err)
+	}
 }

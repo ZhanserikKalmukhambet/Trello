@@ -2,7 +2,6 @@ package repository
 
 import (
 	"github.com/ZhanserikKalmukhambet/Trello/internal/entity"
-	"gorm.io/gorm"
 )
 
 type Authorization interface {
@@ -32,6 +31,7 @@ type Repository struct {
 	TodoItem
 }
 
-func NewRepository(db *gorm.DB) *Repository {
+func NewRepository() *Repository {
 	return &Repository{}
+
 }
