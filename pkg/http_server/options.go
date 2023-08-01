@@ -6,19 +6,19 @@ type Option func(*Server)
 
 func WithPort(port string) Option {
 	return func(server *Server) {
-		server.server.Addr = port
+		server.httpServer.Addr = port
 	}
 }
 
 func WithReadTimeout(t time.Duration) Option {
 	return func(server *Server) {
-		server.server.ReadTimeout = t
+		server.httpServer.ReadTimeout = t
 	}
 }
 
 func WithWriteTimeout(t time.Duration) Option {
 	return func(server *Server) {
-		server.server.WriteTimeout = t
+		server.httpServer.WriteTimeout = t
 	}
 }
 

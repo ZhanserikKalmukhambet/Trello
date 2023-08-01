@@ -7,17 +7,17 @@ import (
 )
 
 type Server struct {
-	server          *http.Server
+	httpServer      *http.Server
 	shutdownTimeout time.Duration
 	notify          chan error
 }
 
 func New(handler http.Handler, opts ...Option) *Server {
-	httpServer := &http.Server{Handler: handler, Addr: "localhost:8080"}
+	httpServer := &http.Server{Handler: handler}
 
 	s := &Server{
-		server: httpServer,
-		notify: make(chan error, 1),
+		httpServer: httpServer,
+		notify:     make(chan error, 1),
 	}
 
 	for _, opt := range opts {
@@ -29,7 +29,7 @@ func New(handler http.Handler, opts ...Option) *Server {
 
 func (s *Server) Start() {
 	go func() {
-		s.notify <- s.server.ListenAndServe()
+		s.notify <- s.httpServer.ListenAndServe()
 		close(s.notify)
 	}()
 }
@@ -39,7 +39,7 @@ func (s *Server) Shutdown() error {
 
 	defer cancel()
 
-	return s.server.Shutdown(ctx)
+	return s.httpServer.Shutdown(ctx)
 }
 
 func (s *Server) Notify() <-chan error {
