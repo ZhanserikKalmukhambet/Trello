@@ -1,0 +1,13 @@
+package service
+
+import (
+	"github.com/ZhanserikKalmukhambet/Trello/internal/repository"
+)
+
+type AuthService struct {
+	repos repository.Authorization
+}
+
+func NewAuthService(repos repository.Authorization) *AuthService {
+	return &AuthService{repos: repos}
+}

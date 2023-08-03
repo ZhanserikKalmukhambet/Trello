@@ -5,6 +5,14 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+const (
+	UsersTable      = "users"
+	TodoListsTable  = "todo_lists"
+	TodoItemsTable  = "todo_items"
+	UsersListsTable = "users_lists"
+	ListsItemsTable = "lists_items"
+)
+
 type Postgres struct {
 	Port     string
 	Host     string

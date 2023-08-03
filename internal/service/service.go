@@ -6,7 +6,7 @@ import (
 )
 
 type Authorization interface {
-	Register(user entity.User) (int, error)
+	Register(user entity.User) (int, error) // (newUserID, error )
 	Login(username, password string) (entity.User, error)
 }
 
@@ -33,5 +33,7 @@ type Service struct {
 }
 
 func NewService(repo *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Authorization: NewAuthService(repo.Authorization),
+	}
 }
