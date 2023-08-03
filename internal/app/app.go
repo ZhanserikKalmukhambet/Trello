@@ -9,6 +9,8 @@ import (
 	"github.com/ZhanserikKalmukhambet/Trello/pkg/http_server"
 	_ "github.com/lib/pq"
 	"log"
+	"os"
+	"os/signal"
 )
 
 func Run(cfg *config.Config) error {
@@ -37,6 +39,21 @@ func Run(cfg *config.Config) error {
 
 	server.Start()
 	log.Println("server started")
+
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt)
+
+	select {
+	case s := <-interrupt:
+		log.Printf("signal received: %s", s.String())
+	case err = <-server.Notify():
+		log.Printf("server notify: %s", err.Error())
+	}
+
+	err = server.Shutdown()
+	if err != nil {
+		log.Printf("server shutdown err: %s", err)
+	}
 
 	return nil
 }

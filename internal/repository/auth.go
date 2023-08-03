@@ -8,7 +8,7 @@ import (
 
 func (r *AuthPostgres) CreateUser(user entity.User) (int, error) {
 	var id int
-	query := fmt.Sprintf("INSERT INTO %s (username, email, password) VALUES ($1 $2 $3) RETURNING id", pgrepo.UsersTable)
+	query := fmt.Sprintf("INSERT INTO %s (username, email, password) VALUES ($1, $2, $3) RETURNING id", pgrepo.UsersTable)
 
 	row := r.db.QueryRow(query, user.Username, user.Email, user.Password)
 	if err := row.Scan(&id); err != nil {
