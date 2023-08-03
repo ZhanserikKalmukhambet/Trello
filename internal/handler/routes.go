@@ -13,6 +13,7 @@ func (h *Handler) InitRouter() *gin.Engine {
 	}
 
 	api := router.Group("/api")
+	api.Use(h.authMiddleware())
 	{
 		lists := api.Group("/lists")
 		{
