@@ -29,5 +29,18 @@ func (h *Handler) signUp(ctx *gin.Context) {
 }
 
 func (h *Handler) signIn(ctx *gin.Context) {
+	var input entity.LoginRequest
 
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	token, err := h.srvs.GenerateToken(input.Username, input.Password)
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, gin.H{"token": token})
 }

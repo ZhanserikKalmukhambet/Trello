@@ -17,6 +17,10 @@ func (r *AuthPostgres) CreateUser(user entity.User) (int, error) {
 	return id, nil
 }
 
-func (r *AuthPostgres) GetUser(username, password string) (entity.User, error) {
-	return entity.User{}, nil
+func (r *AuthPostgres) GetUser(username string) (entity.User, error) {
+	var user entity.User
+	query := fmt.Sprintf("SELECT * FROM %s WHERE username=$1", pgrepo.UsersTable)
+	err := r.db.Get(&user, query, username)
+
+	return user, err
 }

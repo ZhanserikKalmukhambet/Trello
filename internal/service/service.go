@@ -7,7 +7,7 @@ import (
 
 type Authorization interface {
 	Register(user entity.User) (int, error) // (newUserID, error )
-	Login(username, password string) (entity.User, error)
+	GenerateToken(username, password string) (string, error)
 }
 
 type TodoList interface {
