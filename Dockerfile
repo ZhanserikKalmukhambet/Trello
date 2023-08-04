@@ -1,4 +1,4 @@
-FROM golang:latest AS builder
+FROM golang:1.20.7-alpine3.18 as builder
 WORKDIR /app
 COPY . .
 RUN go build -o main cmd/main.go
@@ -9,3 +9,4 @@ COPY --from=builder /app/main .
 COPY config.yaml .
 EXPOSE 8080
 CMD ["/app/main"]
+
