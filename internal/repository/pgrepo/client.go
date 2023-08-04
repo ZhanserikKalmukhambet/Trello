@@ -6,11 +6,9 @@ import (
 )
 
 const (
-	UsersTable      = "users"
-	TodoListsTable  = "todo_lists"
-	TodoItemsTable  = "todo_items"
-	UsersListsTable = "users_lists"
-	ListsItemsTable = "lists_items"
+	UsersTable     = "users"
+	TodoListsTable = "todo_lists"
+	TodoItemsTable = "todo_items"
 )
 
 type Postgres struct {

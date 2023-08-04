@@ -20,6 +20,7 @@ import (
 // @Failure 500 {object} Error
 // @Failure default {object} Error
 // @Router /api/lists/:id/items [post]
+
 func (h *Handler) createListItem(ctx *gin.Context) {
 	listID, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
