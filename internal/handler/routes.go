@@ -1,10 +1,18 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	_ "github.com/ZhanserikKalmukhambet/Trello/docs"
+	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
+)
 
 func (h *Handler) InitRouter() *gin.Engine {
 	//gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+
+	//swagger
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	auth := router.Group("/auth")
 	{
@@ -20,7 +28,7 @@ func (h *Handler) InitRouter() *gin.Engine {
 			lists.POST("/", h.createList)
 			lists.GET("/", h.getLists)
 			lists.GET("/:id", h.getListByID)
-			lists.PUT("/:id", h.updateList)
+			lists.PATCH("/:id", h.updateList)
 			lists.DELETE("/:id", h.removeList)
 
 			items := lists.Group("/:id/items")
@@ -28,7 +36,7 @@ func (h *Handler) InitRouter() *gin.Engine {
 				{
 					items.POST("/", h.createListItem)
 					items.GET("/", h.getListItems)
-					items.PUT("/:item_id", h.updateListItem)
+					items.PATCH("/:item_id", h.updateListItem)
 					items.DELETE("/:item_id", h.removeListItem)
 				}
 			}

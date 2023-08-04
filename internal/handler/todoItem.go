@@ -7,6 +7,19 @@ import (
 	"strconv"
 )
 
+// @Summary Create todo item
+// @Security ApiKeyAuth
+// @Tags items
+// @Description create todo item
+// @ID create-item
+// @Accept  json
+// @Produce  json
+// @Param input body entity.TodoItem true "list info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/lists/:id/items [post]
 func (h *Handler) createListItem(ctx *gin.Context) {
 	listID, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -30,6 +43,18 @@ func (h *Handler) createListItem(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"todo_item_id": id})
 }
 
+// @Summary Get All Items
+// @Security ApiKeyAuth
+// @Tags items
+// @Description get all items
+// @ID get-all-items
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} StatusResponse
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/lists/:id/items [get]
 func (h *Handler) getListItems(ctx *gin.Context) {
 	listID, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {

@@ -46,6 +46,9 @@ func (r *TodoListPostgres) GetTodoListByID(userID, listID int) (entity.TodoList,
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id=$1 AND user_id=$2", pgrepo.TodoListsTable)
 	err := r.db.Select(&lists, query, listID, userID)
 
+	if len(lists) == 0 {
+		return entity.TodoList{}, err
+	}
 	return lists[0], err
 }
 

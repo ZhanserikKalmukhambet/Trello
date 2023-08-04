@@ -6,6 +6,17 @@ import (
 	"github.com/ZhanserikKalmukhambet/Trello/internal/config"
 )
 
+// @title           Trello
+// @version         1.0
+// @description     API SERVER for Todo Application
+
+// @host      localhost:8080
+// @BasePath  /
+
+// @securitydefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+
 func main() {
 	// set configuration files
 	cfg, err := config.InitConfig("config.yaml")

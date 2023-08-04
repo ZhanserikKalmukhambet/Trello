@@ -7,6 +7,19 @@ import (
 	"strconv"
 )
 
+// @Summary Create todo list
+// @Security ApiKeyAuth
+// @Tags lists
+// @Description create todo list
+// @ID create-list
+// @Accept  json
+// @Produce  json
+// @Param input body entity.TodoList true "list info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/lists [post]
 func (h *Handler) createList(ctx *gin.Context) {
 	userID, err := getAuthUserID(ctx)
 	if err != nil {
@@ -28,6 +41,18 @@ func (h *Handler) createList(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"todo_list_id": id})
 }
 
+// @Summary Get All Lists
+// @Security ApiKeyAuth
+// @Tags lists
+// @Description get all lists
+// @ID get-all-lists
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} StatusResponse
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/lists [get]
 func (h *Handler) getLists(ctx *gin.Context) {
 	userID, err := getAuthUserID(ctx)
 	if err != nil {
@@ -44,6 +69,18 @@ func (h *Handler) getLists(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, lists)
 }
 
+// @Summary Get List By ID
+// @Security ApiKeyAuth
+// @Tags lists
+// @Description get list by id
+// @ID get-list-by-id
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} entity.TodoList
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/lists/:id [get]
 func (h *Handler) getListByID(ctx *gin.Context) {
 	userID, err := getAuthUserID(ctx)
 	if err != nil {
@@ -58,8 +95,8 @@ func (h *Handler) getListByID(ctx *gin.Context) {
 	}
 
 	list, err := h.srvs.TodoList.GetTodoListByID(userID, id)
-	if err != nil {
-		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+	if err != nil || list.ID == 0 {
+		NewErrorResponse(ctx, http.StatusInternalServerError, "You can't get other's lists")
 		return
 	}
 
