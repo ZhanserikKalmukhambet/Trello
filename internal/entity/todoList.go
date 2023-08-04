@@ -2,9 +2,9 @@ package entity
 
 type TodoList struct {
 	ID          int    `json:"id"`
-	Title       string `json:"title" db:"title" binding:"required"`
+	Title       string `json:"title" db:"title"`
 	Description string `json:"description" db:"description"`
-	UserID      int    `json:"user_id" db:"user_id" binding:"required"`
+	UserID      int    `json:"user_id" db:"user_id"`
 }
 
 type UpdateListInput struct {
