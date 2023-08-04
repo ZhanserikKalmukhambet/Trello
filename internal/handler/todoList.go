@@ -45,7 +45,7 @@ func (h *Handler) getLists(ctx *gin.Context) {
 }
 
 func (h *Handler) getListByID(ctx *gin.Context) {
-	_, err := getAuthUserID(ctx)
+	userID, err := getAuthUserID(ctx)
 	if err != nil {
 		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
@@ -57,18 +57,17 @@ func (h *Handler) getListByID(ctx *gin.Context) {
 		return
 	}
 
-	list, err := h.srvs.TodoList.GetTodoListByID(id)
+	list, err := h.srvs.TodoList.GetTodoListByID(userID, id)
 	if err != nil {
 		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	ctx.JSON(http.StatusOK, list)
-
 }
 
 func (h *Handler) updateList(ctx *gin.Context) {
-	_, err := getAuthUserID(ctx)
+	userID, err := getAuthUserID(ctx)
 	if err != nil {
 		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
@@ -86,7 +85,7 @@ func (h *Handler) updateList(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.srvs.TodoList.UpdateTodoList(id, input); err != nil {
+	if err := h.srvs.TodoList.UpdateTodoList(userID, id, input); err != nil {
 		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -95,5 +94,23 @@ func (h *Handler) updateList(ctx *gin.Context) {
 }
 
 func (h *Handler) removeList(ctx *gin.Context) {
+	userID, err := getAuthUserID(ctx)
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
 
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusBadRequest, "invalid id param")
+		return
+	}
+
+	err = h.srvs.TodoList.DeleteTodoList(userID, id)
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "deleted"})
 }

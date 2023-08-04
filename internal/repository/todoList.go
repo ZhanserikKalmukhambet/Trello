@@ -41,22 +41,28 @@ func (r *TodoListPostgres) GetTodoLists(userID int) ([]entity.TodoList, error) {
 	return lists, err
 }
 
-func (r *TodoListPostgres) GetTodoListByID(listID int) (entity.TodoList, error) {
+func (r *TodoListPostgres) GetTodoListByID(userID, listID int) (entity.TodoList, error) {
 	var lists []entity.TodoList
-	query := fmt.Sprintf("SELECT * FROM %s WHERE id=$1", pgrepo.TodoListsTable)
-	err := r.db.Select(&lists, query, listID)
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id=$1 AND user_id=$2", pgrepo.TodoListsTable)
+	err := r.db.Select(&lists, query, listID, userID)
 
 	return lists[0], err
 }
 
 func (r *TodoListPostgres) DeleteTodoList(userID, listID int) error {
-	//TODO implement me
-	panic("implement me")
+	query := fmt.Sprintf("DELETE FROM %s WHERE id=$1 AND user_id=$2", pgrepo.TodoListsTable)
+	_, err := r.db.Exec(query, listID, userID)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	return nil
 }
 
-func (r *TodoListPostgres) UpdateTodoList(listID int, input entity.UpdateListInput) error {
-	query := fmt.Sprintf("UPDATE %s SET title=$1, description=$2 WHERE id=$3", pgrepo.TodoListsTable)
-	_, err := r.db.Exec(query, input.Title, input.Description, listID)
+func (r *TodoListPostgres) UpdateTodoList(userID, listID int, input entity.UpdateListInput) error {
+	query := fmt.Sprintf("UPDATE %s SET title=$1, description=$2 WHERE id=$3 AND user_id=$4", pgrepo.TodoListsTable)
+	_, err := r.db.Exec(query, input.Title, input.Description, listID, userID)
 	if err != nil {
 		log.Fatal(err)
 		return err
