@@ -21,18 +21,22 @@ type TokenClaims struct {
 	UserID int `json:"user_id"`
 }
 
-func (a *AuthService) Register(user entity.User) (int, error) {
+func (s *AuthService) Register(user entity.User) (int, error) {
 	hashedPassword, err := util.HashPassword(user.Password)
 	if err != nil {
 		return 0, err
 	}
 
 	user.Password = hashedPassword
-	return a.repos.CreateUser(user)
+	return s.repos.CreateUser(user)
 }
 
-func (a *AuthService) GenerateToken(username, password string) (string, error) {
-	user, err := a.repos.GetUser(username)
+func (s *AuthService) GetUserByID(id int) (entity.User, error) {
+	return s.repos.GetUserByID(id)
+}
+
+func (s *AuthService) GenerateToken(username, password string) (string, error) {
+	user, err := s.repos.GetUser(username)
 	if err != nil {
 		return "", err
 	}
@@ -56,7 +60,7 @@ func (a *AuthService) GenerateToken(username, password string) (string, error) {
 	return token.SignedString([]byte(signingKey))
 }
 
-func (a *AuthService) VerifyToken(accessToken string) (int, error) {
+func (s *AuthService) VerifyToken(accessToken string) (int, error) {
 	token, err := jwt.ParseWithClaims(accessToken, &TokenClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("invalid signing method")

@@ -2,9 +2,10 @@ package entity
 
 type TodoItem struct {
 	ID          int    `json:"id" db:"id"`
-	Title       string `json:"title" db:"title"`
+	Title       string `json:"title" db:"title" binding:"required"`
 	Description string `json:"description" db:"description"`
 	Completed   bool   `json:"completed" db:"completed"`
+	TodoListID  int    `json:"todo_list_id" db:"todo_list_id" binding:"required"`
 }
 
 type UpdateItemInput struct {
